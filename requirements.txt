@@ -1,7 +1,7 @@
 streamlit
+pandas
 pandasai
 plotly
-pandas
 boto3
 google-auth
 gspread
