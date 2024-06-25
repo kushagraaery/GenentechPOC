@@ -62,9 +62,6 @@ st.markdown("""
 st.title(" :bar_chart: Gen AI Insight Generator")
 st.markdown('<style>div.block-container{padding-top:1rem;}</style>', unsafe_allow_html=True)
 
-# Set the working directory to the path where your dataset is located
-os.chdir(r"C:\Users\kushagra.sharma1\OneDrive - Incedo Technology Solutions Ltd\Desktop\DashBoard")
-
 # Data Source Selection
 st.sidebar.header("Step 1: Choose Data Source")
 data_source = st.sidebar.selectbox("Choose Data Source", ["CSV", "Excel", "SQL Database", "AWS S3", "Google Sheets"])
