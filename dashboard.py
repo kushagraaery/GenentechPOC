@@ -3,6 +3,8 @@ import plotly.express as px
 import pandas as pd
 import os
 import warnings
+from pandasai import SmartDataframe
+from pandasai.llm import OpenAI
 import plotly.figure_factory as ff
 import boto3
 from google.oauth2.service_account import Credentials
