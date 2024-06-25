@@ -3,7 +3,7 @@ import plotly.express as px
 import pandas as pd
 import os
 import warnings
-from pandasai import SmartDataframe
+from pandasai.smart_dataframe import SmartDataframe
 from pandasai.llm import OpenAI
 import plotly.figure_factory as ff
 import boto3
