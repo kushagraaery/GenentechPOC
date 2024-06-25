@@ -1,12 +1,11 @@
 streamlit
-pandas
-pandasai
 plotly
+pandas
 boto3
 google-auth
 gspread
 sqlalchemy
 xlrd
 scikit-learn
+pandasai
 openai
-yaml
