@@ -1,5 +1,5 @@
 streamlit
-pandasai
+git+https://github.com/gventuri/pandas-ai.git
 plotly
 pandas
 boto3
