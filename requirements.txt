@@ -1,4 +1,5 @@
 streamlit
+pandasai
 plotly
 pandas
 boto3
