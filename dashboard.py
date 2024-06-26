@@ -9,6 +9,7 @@ from google.oauth2.service_account import Credentials
 import gspread
 from sqlalchemy import create_engine
 import xlrd
+from openai import OpenAI
 
 warnings.filterwarnings('ignore')
 
@@ -61,6 +62,9 @@ st.markdown("""
 
 st.title(" :bar_chart: Gen AI Insight Generator")
 st.markdown('<style>div.block-container{padding-top:1rem;}</style>', unsafe_allow_html=True)
+
+# Set the working directory to the path where your dataset is located
+os.chdir(r"C:\Users\kushagra.sharma1\OneDrive - Incedo Technology Solutions Ltd\Desktop\DashBoard")
 
 # Data Source Selection
 st.sidebar.header("Step 1: Choose Data Source")
@@ -257,35 +261,6 @@ if 'df' in locals():
     st.subheader("Statistical Analysis Report")
     st.write(df.describe())
 
-    # Adding a chat window for the bot
-    st.subheader("Chat with Data Bot")
-
-    # Initialize the chat history
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
-    
-    # Function to display chat messages
-    def display_messages():
-        for msg in st.session_state.messages:
-            st.write(f"{msg['role']}: {msg['content']}")
-    
-    # Display chat history
-    display_messages()
-    
-    # Text input for the user query
-    user_query = st.text_input("You:", "")
-    
-    # Process the user query
-    if st.button("Send"):
-        if user_query:
-            st.session_state.messages.append({"role": "User", "content": user_query})
-            llm = OpenAI(api_token=os.environ['OPENAI_API_KEY'])
-            query_engine = SmartDataframe(df, config={"llm": llm})
-            response = query_engine.chat(user_query)
-            st.session_state.messages.append({"role": "Bot", "content": response})
-            # Display the updated chat history
-            display_messages()
-
     # Chart Editor Section
     st.sidebar.header("Chart Editor")
 
@@ -307,3 +282,32 @@ if 'df' in locals():
             fig = px.pie(df, values=y_column, names=x_column, title=f"{y_column} distribution by {x_column}")
         
         st.plotly_chart(fig, use_container_width=True)
+
+
+    st.sidebar.header("Chat Bot Key")
+
+    with st.sidebar:
+        openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
+        "[Get an OpenAI API key](https://platform.openai.com/account/api-keys)"
+        "[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/streamlit/llm-examples?quickstart=1)"
+    
+    st.title("💬 Chatbot")
+    st.caption("🚀 A Streamlit chatbot powered by OpenAI")
+    if "messages" not in st.session_state:
+        st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
+    
+    for msg in st.session_state.messages:
+        st.chat_message(msg["role"]).write(msg["content"])
+    
+    if prompt := st.chat_input():
+        if not openai_api_key:
+            st.info("Please add your OpenAI API key to continue.")
+            st.stop()
+    
+        client = OpenAI(api_key=openai_api_key)
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        st.chat_message("user").write(prompt)
+        response = client.chat.completions.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
+        msg = response.choices[0].message.content
+        st.session_state.messages.append({"role": "assistant", "content": msg})
+        st.chat_message("assistant").write(msg)
