@@ -7,5 +7,4 @@ gspread
 sqlalchemy
 xlrd
 scikit-learn
-pandasai
 openai
